@@ -30,6 +30,7 @@ class DeepInfra(AsyncGeneratorProvider, ProviderModelMixin):
         proxy: str = None,
         timeout: int = 120,
         auth: str = None,
+        format=None,
         **kwargs
     ) -> AsyncResult:
         headers = {
@@ -63,7 +64,8 @@ class DeepInfra(AsyncGeneratorProvider, ProviderModelMixin):
                 'temperature': kwargs.get("temperature", 0.7),
                 'max_tokens': kwargs.get("max_tokens", 512),
                 'stop': kwargs.get("stop", []),
-                'stream'  : True
+                'stream'  : True,
+                "response_format": {"type":"json_object"} if format else format
             }
             async with session.post('https://api.deepinfra.com/v1/openai/chat/completions',
                                     json=json_data) as response:
