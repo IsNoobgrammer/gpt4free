@@ -115,6 +115,10 @@ class Liaobots(AsyncGeneratorProvider, ProviderModelMixin):
             "referer": f"{cls.url}/",
             "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36",
         }
+        history = [message for message in messages[:-1] if message["role"] != "system"]
+        system_message = "\n".join([message["content"] for message in messages if message["role"] == "system"])
+        if not system_message:
+            system_message = "You are helpful assistant. Follow the user's instructions carefully."
         async with ClientSession(
             headers=headers,
             cookie_jar=cls._cookie_jar,
@@ -142,9 +146,9 @@ class Liaobots(AsyncGeneratorProvider, ProviderModelMixin):
             data = {
                 "conversationId": str(uuid.uuid4()),
                 "model": models[cls.get_model(model)],
-                "messages": messages,
+                "messages": history,
                 "key": "",
-                "prompt": kwargs.get("system_message", "You are ChatGPT, a large language model trained by OpenAI. Follow the user's instructions carefully."),
+                "prompt": system_message,
             }
             async with session.post(
                 "https://liaobots.work/api/chat",
