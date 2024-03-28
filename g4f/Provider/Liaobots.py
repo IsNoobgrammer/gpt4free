@@ -150,6 +150,7 @@ class Liaobots(AsyncGeneratorProvider, ProviderModelMixin):
                 "key": "",
                 "prompt": system_message,
             }
+            print(data)
             async with session.post(
                 "https://liaobots.work/api/chat",
                 proxy=proxy,
