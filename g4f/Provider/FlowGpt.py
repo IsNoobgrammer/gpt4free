@@ -17,7 +17,7 @@ class FlowGpt(AsyncGeneratorProvider, ProviderModelMixin):
     models = [
         "gpt-3.5-turbo",
         "gpt-3.5-long",
-        "gpt-4",
+        "gpt-4-turbo",
         "google-gemini",
         "claude-v2",
         "llama2-13b"
