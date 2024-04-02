@@ -17,7 +17,7 @@ class FlowGpt(AsyncGeneratorProvider, ProviderModelMixin):
     models = [
         "gpt-3.5-turbo",
         "gpt-3.5-long",
-        "gpt-4-turbo",
+        "gpt-4",
         "google-gemini",
         "claude-v2",
         "llama2-13b"
@@ -58,7 +58,7 @@ class FlowGpt(AsyncGeneratorProvider, ProviderModelMixin):
             if not system_message:
                 system_message = "You are helpful assistant. Follow the user's instructions carefully."
             data = {
-                "model": model,
+                "model": "gpt-4-turbo" if "gpt-4" in model else model ,
                 "nsfw": True,
                 "question": messages[-1]["content"],
                 "history": [{"role": "assistant", "content": "Hello, how can I help you today?"}, *history],
