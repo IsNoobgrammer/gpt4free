@@ -3,6 +3,7 @@ from __future__ import annotations
 import uuid
 
 from aiohttp import ClientSession, BaseConnector
+from aiohttp_proxy import ProxyConnector
 
 from ..typing import AsyncResult, Messages
 from .base_provider import AsyncGeneratorProvider, ProviderModelMixin
@@ -122,20 +123,18 @@ class Liaobots(AsyncGeneratorProvider, ProviderModelMixin):
         async with ClientSession(
             headers=headers,
             cookie_jar=cls._cookie_jar,
-            connector=get_connector(connector, proxy, True)
+            connector=ProxyConnector.from_url(proxy)
         ) as session:
             cls._auth_code = auth if isinstance(auth, str) else cls._auth_code
             if not cls._auth_code:
                 async with session.post(
                     "https://liaobots.work/recaptcha/api/login",
-                    proxy=proxy,
                     data={"token": "abcdefghijklmnopqrst"},
                     verify_ssl=False
                 ) as response:
                     await raise_for_status(response)
                 async with session.post(
                     "https://liaobots.work/api/user",
-                    proxy=proxy,
                     json={"authcode": ""},
                     verify_ssl=False
                 ) as response:
@@ -153,7 +152,6 @@ class Liaobots(AsyncGeneratorProvider, ProviderModelMixin):
             #print(data)
             async with session.post(
                 "https://liaobots.work/api/chat",
-                proxy=proxy,
                 json=data,
                 headers={"x-auth-code": cls._auth_code},
                 verify_ssl=False
