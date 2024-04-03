@@ -55,7 +55,7 @@ class DeepInfra(AsyncGeneratorProvider, ProviderModelMixin):
             
         async with StreamSession(headers=headers,
             timeout=timeout,
-            proxies={"https": proxy},
+            proxies={"http": proxy},
             impersonate="chrome110"
         ) as session:
             json_data = {
@@ -68,7 +68,7 @@ class DeepInfra(AsyncGeneratorProvider, ProviderModelMixin):
                 "response_format": {"type":"json_object"} if format else format
             }
             async with session.post('https://api.deepinfra.com/v1/openai/chat/completions',
-                                    json=json_data) as response:
+                                    json=json_data,verify_ssl=False) as response:
                 response.raise_for_status()
                 first = True
                 async for line in response.iter_lines():
