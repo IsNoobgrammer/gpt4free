@@ -123,16 +123,17 @@ class Liaobots(AsyncGeneratorProvider, ProviderModelMixin):
         async with ClientSession(
             headers=headers,
             cookie_jar=cls._cookie_jar,
-            connector=ProxyConnector.from_url(proxy)
+            # connector=ProxyConnector.from_url(proxy)
         ) as session:
             cls._auth_code = auth if isinstance(auth, str) else cls._auth_code
-            if not cls._auth_code:
+            if True:
                 async with session.post(
                     "https://liaobots.work/recaptcha/api/login",
                     data={"token": "abcdefghijklmnopqrst"},
                     verify_ssl=False
                 ) as response:
                     await raise_for_status(response)
+            if not cls._auth_code:
                 async with session.post(
                     "https://liaobots.work/api/user",
                     json={"authcode": ""},
