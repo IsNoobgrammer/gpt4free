@@ -60,6 +60,13 @@ models = {
         "tokenLimit": 200000,
         "context": "200K",
     },
+    "claude-3-haiku": {
+        "id":"claude-3-haiku-20240307",
+        "name":"Claude-3-Haiku",
+        "maxLength":800000,
+        "tokenLimit":200000,
+        "context":"200K",
+    },
     "claude-2.1": {
         "id": "claude-2.1",
         "name": "Claude-2.1-200k",
